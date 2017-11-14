@@ -173,9 +173,9 @@ def fk( theta_1, theta_2, theta_3 ):
     pose_2 = ( l[1]*c(theta_2)*c(theta_1), l[1]*c(theta_2)*c(theta_1), l[0] + l[2]*s(theta_2) )
 
     pose_3 = (
-             ( l[1]*c(theta_2) + l[2]*c(theta_2 + theta_3) )*c(theta_1), \
-             ( l[1]*c(theta_2) + l[2]*c(theta_2 + theta_3))*s(theta_1), \
-             ( l[0] + l[1]*s(theta_1) + l[2]*s(theta_2+theta_3))
+                 ( l[1]*c(theta_2) + l[2]*c(theta_2 + theta_3) )*c(theta_1), \
+                 ( l[1]*c(theta_2) + l[2]*c(theta_2 + theta_3))*s(theta_1), \
+                 ( l[0] + l[1]*s(theta_1) + l[2]*s(theta_2+theta_3))
              )
 
 
@@ -184,13 +184,18 @@ def fk( theta_1, theta_2, theta_3 ):
 def ik(x,y,z):
     """
 
-    :param pos: list of x,y,z position of the EE
+    :param x: x position of the EE
+    :param y: y position of the EE
+    :param z: z position of the EE
     :return: list of the joint angles
     """
 
     theta_1 = math.atan2(y,z)
-    theta_3 = -math.acos((x*x + y*y) + (z- l[0])  )
-    theta_2 = math.atan2( z- l[0] , math.sqrt(x*x, y*y)   )
+    theta_3 = -math.acos( (x*x + y*y + (z- l[0])**2 -l[1]*l[1] - l[2]*[2])/ ( 2*l[1]*[2] )   )
+    theta_2 = math.atan2( z- l[0] , math.sqrt(x*x, y*y) ) - math.atan2( l[2]*s(theta_3), l[1] + l[2]*c(theta_3) )
+
+    return (theta_1, theta_2, theta_3)
+    
 
     pass
 
