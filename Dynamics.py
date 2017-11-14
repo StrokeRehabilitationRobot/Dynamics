@@ -147,5 +147,28 @@ def get_jacoboian_matricies(theta):
     return (J_1, J_2, J_3)
 
 
+def get_fk( theta ):
+
+
+    theta_1 = theta[0]
+    theta_2 = theta[1]
+    theta_3 = theta[2]
+
+
+    pos_1 = (0,0,l[0])
+
+    pos_2 = ( l[1]*c(theta_2)*c(theta_1), l[1]*c(theta_2)*c(theta_1), l[0] + l[2]*s(theta_2) )
+
+    pos_3 = (
+             ( l[1]*c(theta_2) + l[2]*c(theta_2 + theta_3) )*c(theta_1), \
+             ( l[1]*c(theta_2) + l[2]*c(theta_2 + theta_3))*s(theta_1), \
+             ( l[0] + l[1]*s(theta_1) + l[2]*s(theta_2+theta_3))
+             )
+
+
+    return ( pos_1, pos_2, pos_3  )
+    pass
+
+
 
 print get_jacoboian_matricies([3.14,3.14,3.14])
