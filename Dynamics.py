@@ -2,6 +2,8 @@ from math import sin as s
 from math import cos as c
 import math
 import numpy as np
+from Main import Robot
+
 
 
 
@@ -11,7 +13,7 @@ m = [1, 1, 1]
 I = [[1, 1, 1], [1, 1, 1], [1, 1, 1]] # Ix Iy Iz
 
 
-def make_mass_matrix(theta_1,theta_2,theta_3):
+def make_mass_matrix(robot):
 
     """
 
@@ -21,6 +23,10 @@ def make_mass_matrix(theta_1,theta_2,theta_3):
     :return: mass matrix
     """
 
+    I,m,l,r = robot.uppack()
+    theta_1 = robot.q[0]
+    theta_2 = robot.q[1]
+    theta_3 = robot.q[2]
 
     M_11 = I[1][1] * s(theta_2) ** 2 + I[2][1] * s(theta_2 + theta_3) ** 2 + \
            I[0][2] + I[1][2] * c(theta_2) ** 2 + \
@@ -50,7 +56,7 @@ def make_mass_matrix(theta_1,theta_2,theta_3):
     return  M
 
 
-def make_gravity_matrix(theta_1,theta_2,theta_3):
+def make_gravity_matrix(robot):
     """
 
     :param theta_1: angle for joint 1
@@ -58,7 +64,9 @@ def make_gravity_matrix(theta_1,theta_2,theta_3):
     :param theta_1: angle for joint 3
     :return: gravity matix
     """
-
+    I, m, l, r = robot.uppack()
+    theta_1 = robot.q[0]
+    theta_2 = robot.q[1]
 
     gravity = 9.81
 
@@ -76,7 +84,7 @@ def make_gravity_matrix(theta_1,theta_2,theta_3):
     return G
 
 
-def make_coriolis_matrix(theta_1,theta_2,theta_3):
+def make_coriolis_matrix(robot):
     """
 
     :param theta_1: angle for joint 1
@@ -85,6 +93,10 @@ def make_coriolis_matrix(theta_1,theta_2,theta_3):
     :return: coriolis matrix
     """
 
+    I, m, l, r = robot.uppack()
+    theta_1 = robot.q[0]
+    theta_2 = robot.q[1]
+    theta_3 = robot.q[2]
 
     theta_23 = theta_2 + theta_3
     C =  np.zeros(shape=(3,3))
@@ -127,7 +139,7 @@ def make_coriolis_matrix(theta_1,theta_2,theta_3):
     return C
 
 
-def get_jacobian_matricies(theta_1,theta_2,theta_3):
+def get_jacobian_matricies(robot):
     """
 
     :param theta_1: angle for joint 1
@@ -135,6 +147,11 @@ def get_jacobian_matricies(theta_1,theta_2,theta_3):
     :param theta_1: angle for joint 3
     :return: cartesian pose of links
     """
+
+    I, m, l, r = robot.uppack()
+    theta_1 = robot.q[0]
+    theta_2 = robot.q[1]
+    theta_3 = robot.q[2]
 
 
     J_1 =  np.zeros(shape=(6,3))
@@ -158,7 +175,7 @@ def get_jacobian_matricies(theta_1,theta_2,theta_3):
     return (J_1, J_2, J_3)
 
 
-def fk( theta_1, theta_2, theta_3 ):
+def fk( robot):
     """
 
     :param theta_1: angle for joint 1
@@ -167,6 +184,10 @@ def fk( theta_1, theta_2, theta_3 ):
     :return: cartesian pose of links
     """
 
+    I, m, l, r = robot.uppack()
+    theta_1 = robot.q[0]
+    theta_2 = robot.q[1]
+    theta_3 = robot.q[2]
 
     pose_1 = (0,0,l[0])
 
@@ -181,7 +202,7 @@ def fk( theta_1, theta_2, theta_3 ):
 
     return ( pose_1, pose_2, pose_3  )
 
-def ik(x,y,z):
+def ik(robot, pose):
     """
 
     :param x: x position of the EE
@@ -189,17 +210,22 @@ def ik(x,y,z):
     :param z: z position of the EE
     :return: list of the joint angles
     """
+    I, m, l, r = robot.uppack()
+    x = pose[0]
+    y = pose[1]
+    z = pose[2]
 
     theta_1 = math.atan2(y,z)
     theta_3 = -math.acos( (x*x + y*y + (z- l[0])**2 -l[1]*l[1] - l[2]*[2])/ ( 2*l[1]*[2] )   )
     theta_2 = math.atan2( z- l[0] , math.sqrt(x*x, y*y) ) - math.atan2( l[2]*s(theta_3), l[1] + l[2]*c(theta_3) )
 
     return (theta_1, theta_2, theta_3)
-    
+
 
     pass
 
-
+def get_torque():
+    pass
 
 
 
