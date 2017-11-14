@@ -2,7 +2,7 @@ from math import sin as s
 from math import cos as c
 import math
 import numpy as np
-from Main import Robot
+from Main.Robot import Robot
 
 
 
@@ -23,7 +23,7 @@ def make_mass_matrix(robot):
     :return: mass matrix
     """
 
-    I,m,l,r = robot.uppack()
+    I,m,l,r = robot.unpack()
     theta_1 = robot.q[0]
     theta_2 = robot.q[1]
     theta_3 = robot.q[2]
@@ -64,7 +64,7 @@ def make_gravity_matrix(robot):
     :param theta_1: angle for joint 3
     :return: gravity matix
     """
-    I, m, l, r = robot.uppack()
+    I, m, l, r = robot.unpack()
     theta_1 = robot.q[0]
     theta_2 = robot.q[1]
 
@@ -93,7 +93,7 @@ def make_coriolis_matrix(robot):
     :return: coriolis matrix
     """
 
-    I, m, l, r = robot.uppack()
+    I, m, l, r = robot.unpack()
     theta_1 = robot.q[0]
     theta_2 = robot.q[1]
     theta_3 = robot.q[2]
@@ -148,7 +148,7 @@ def get_jacobian_matricies(robot):
     :return: cartesian pose of links
     """
 
-    I, m, l, r = robot.uppack()
+    I, m, l, r = robot.unpack()
     theta_1 = robot.q[0]
     theta_2 = robot.q[1]
     theta_3 = robot.q[2]
@@ -184,7 +184,7 @@ def fk( robot):
     :return: cartesian pose of links
     """
 
-    I, m, l, r = robot.uppack()
+    I, m, l, r = robot.unpack()
     theta_1 = robot.q[0]
     theta_2 = robot.q[1]
     theta_3 = robot.q[2]
@@ -210,7 +210,7 @@ def ik(robot, pose):
     :param z: z position of the EE
     :return: list of the joint angles
     """
-    I, m, l, r = robot.uppack()
+    I, m, l, r = robot.unpack()
     x = pose[0]
     y = pose[1]
     z = pose[2]
@@ -239,8 +239,6 @@ def get_torque(robot):
     return M*qdd + C*qd + G
 
 
-
-
 def trajectory(q, qd, dt):
     # TODO created docstring
     """
@@ -258,3 +256,21 @@ def trajectory(q, qd, dt):
     x = np.asarray([ [q[0]], [qd[0]],[q[1]], [qd[1]]])
     return np.linalg.solve(A,x)
 
+
+def get_linear_vel(robot):
+    """
+
+    :param robot:
+    :return:
+    """
+
+    J1, J2, J3 = get_jacobian_matricies(robot)
+    qd = np.asarray(robot.qd).reshap(3,1)
+
+    J = J3[0:3,0:3]
+    return  J*qd
+
+
+
+r = Robot()
+get_linear_vel(r)
