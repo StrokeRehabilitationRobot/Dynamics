@@ -222,10 +222,22 @@ def ik(robot, pose):
     return (theta_1, theta_2, theta_3)
 
 
-    pass
+def get_torque(robot):
+    """
 
-def get_torque():
-    pass
+    :param robot:
+    :return:
+    """
+    M = make_mass_matrix( robot )
+    C = make_coriolis_matrix(robot)
+    G = make_gravity_matrix(robot)
+    q = np.asarray(robot.q).reshap(3,1)
+    qd = np.asarray(robot.qd).reshap(3,1)
+    qdd = np.asarray(robot.qdd).reshap(3,1)
+    load = np.asarray(robot.tau).reshap(3,1)
+
+    return M*qdd + C*qd + G
+
 
 
 
