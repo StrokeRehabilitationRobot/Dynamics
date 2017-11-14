@@ -7,10 +7,10 @@ from Main import Robot
 
 
 
-l = [1, 1, 1]
-r = [0.5, 0.5, 0.5] # r0 r1 r2
-m = [1, 1, 1]
-I = [[1, 1, 1], [1, 1, 1], [1, 1, 1]] # Ix Iy Iz
+# l = [1, 1, 1]
+# r = [0.5, 0.5, 0.5] # r0 r1 r2
+# m = [1, 1, 1]
+# I = [[1, 1, 1], [1, 1, 1], [1, 1, 1]] # Ix Iy Iz
 
 
 def make_mass_matrix(robot):
@@ -241,4 +241,20 @@ def get_torque(robot):
 
 
 
+def trajectory(q, qd, dt):
+    # TODO created docstring
+    """
+
+    :param q: [start.end] of pose
+    :param qd: [start.end] of vel
+    :param dt: time step
+    :return: array of traj coef
+    """
+    A = np.array(  [ [ 1,  0,      0,     0  ],\
+                     [ 0,  1,      0,     0  ],\
+                     [ 1, dt,  dt**2, dt**3  ],
+                     [ 0,  1,   2*dt, 3*dt**2]]  )
+
+    x = np.asarray([ [q[0]], [qd[0]],[q[1]], [qd[1]]])
+    return np.linalg.solve(A,x)
 
