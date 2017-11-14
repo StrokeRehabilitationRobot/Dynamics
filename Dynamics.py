@@ -9,11 +9,13 @@ r = [0.5, 0.5, 0.5] # r0 r1 r2
 m = [1, 1, 1]
 I = [[1, 1, 1], [1, 1, 1], [1, 1, 1]] # Ix Iy Iz
 
+
 def make_mass_matrix(theta):
 
     """
 
-    :type theta_1: object
+    :type theta: list of angles
+    :return: mass matrix
     """
 
     theta_1 = theta[0]
@@ -47,7 +49,14 @@ def make_mass_matrix(theta):
                     [ M_31, M_32, M_33] ] )
     return  M
 
+
 def make_gravity_matrix(theta):
+    """
+
+    :param theta: list of thetas
+    :return: gravity matix
+    """
+
 
     theta_1 = theta[0]
     theta_2 = theta[1]
@@ -70,8 +79,11 @@ def make_gravity_matrix(theta):
 
 
 def make_coriolis_matrix(theta):
+    """
 
-
+    :param theta: list of angles
+    :return: coriolis matrix
+    """
     theta_1 = theta[0]
     theta_2 = theta[1]
     theta_3 = theta[2]
@@ -117,9 +129,13 @@ def make_coriolis_matrix(theta):
     return C
 
 
+def get_jacobian_matricies(theta):
+    """
 
+    :param theta: list of angles
+    :return: tuple of the jacobian matries of each link
+    """
 
-def get_jacoboian_matricies(theta):
 
     theta_1 = theta[0]
     theta_2 = theta[1]
@@ -147,27 +163,45 @@ def get_jacoboian_matricies(theta):
     return (J_1, J_2, J_3)
 
 
-def get_fk( theta ):
+def fk( theta ):
+    """
 
-
+    :param theta: list of angles
+    :return: cartesian pose of links
+    """
     theta_1 = theta[0]
     theta_2 = theta[1]
     theta_3 = theta[2]
 
 
-    pos_1 = (0,0,l[0])
+    pose_1 = (0,0,l[0])
 
-    pos_2 = ( l[1]*c(theta_2)*c(theta_1), l[1]*c(theta_2)*c(theta_1), l[0] + l[2]*s(theta_2) )
+    pose_2 = ( l[1]*c(theta_2)*c(theta_1), l[1]*c(theta_2)*c(theta_1), l[0] + l[2]*s(theta_2) )
 
-    pos_3 = (
+    pose_3 = (
              ( l[1]*c(theta_2) + l[2]*c(theta_2 + theta_3) )*c(theta_1), \
              ( l[1]*c(theta_2) + l[2]*c(theta_2 + theta_3))*s(theta_1), \
              ( l[0] + l[1]*s(theta_1) + l[2]*s(theta_2+theta_3))
              )
 
 
-    return ( pos_1, pos_2, pos_3  )
+    return ( pose_1, pose_2, pose_3  )
+
+def ik(pos):
+    """
+
+    :param pos: list of x,y,z position of the EE
+    :return: list of the joint angles
+    """
+
+    x = pos[0]
+    y = pos[2]
+    z = pos[3]
+
     pass
+
+
+
 
 
 
