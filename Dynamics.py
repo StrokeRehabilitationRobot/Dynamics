@@ -1,5 +1,6 @@
 from math import sin as s
 from math import cos as c
+import math
 import numpy as np
 
 
@@ -10,17 +11,16 @@ m = [1, 1, 1]
 I = [[1, 1, 1], [1, 1, 1], [1, 1, 1]] # Ix Iy Iz
 
 
-def make_mass_matrix(theta):
+def make_mass_matrix(theta_1,theta_2,theta_3):
 
     """
 
-    :type theta: list of angles
+    :param theta_1: angle for joint 1
+    :param theta_1: angle for joint 2
+    :param theta_1: angle for joint 3
     :return: mass matrix
     """
 
-    theta_1 = theta[0]
-    theta_2 = theta[1]
-    theta_3 = theta[2]
 
     M_11 = I[1][1] * s(theta_2) ** 2 + I[2][1] * s(theta_2 + theta_3) ** 2 + \
            I[0][2] + I[1][2] * c(theta_2) ** 2 + \
@@ -29,12 +29,12 @@ def make_mass_matrix(theta):
 
     M_13 = 0
     M_21 = 0
-    M_22 = I[1][0] + I[2][0] + m[2] * lengths[0] ** 2 + \
+    M_22 = I[1][0] + I[2][0] + m[2] * l[0] ** 2 + \
            m[1] * r[0] ** 2 + m[1] ** 2 + \
-           2 * m[2] * lengths[0] * r[1] * c(theta_3)
+           2 * m[2] * l[0] * r[1] * c(theta_3)
 
     M_23 = I[2][0] + m[2] * r[1] ** 2 + \
-           m[2] * lengths[0] * r[1] * c(theta_3)
+           m[2] * l[0] * r[1] * c(theta_3)
 
 
     M_31 = 0
@@ -50,24 +50,22 @@ def make_mass_matrix(theta):
     return  M
 
 
-def make_gravity_matrix(theta):
+def make_gravity_matrix(theta_1,theta_2,theta_3):
     """
 
-    :param theta: list of thetas
+    :param theta_1: angle for joint 1
+    :param theta_1: angle for joint 2
+    :param theta_1: angle for joint 3
     :return: gravity matix
     """
 
-
-    theta_1 = theta[0]
-    theta_2 = theta[1]
-    theta_3 = theta[2]
 
     gravity = 9.81
 
     G_1 = 0
 
 
-    G_2 = -(m[1] * r[0] + m[2] * lengths[0]) * gravity * c(theta_2) \
+    G_2 = -(m[1] * r[0] + m[2] * l[0]) * gravity * c(theta_2) \
           - m[2] * r[1] * c(theta_2 + theta_3)
 
     G_3 = -m[2] * gravity * r[1] * c(theta_2 + theta_3)
@@ -78,15 +76,15 @@ def make_gravity_matrix(theta):
     return G
 
 
-def make_coriolis_matrix(theta):
+def make_coriolis_matrix(theta_1,theta_2,theta_3):
     """
 
-    :param theta: list of angles
+    :param theta_1: angle for joint 1
+    :param theta_1: angle for joint 2
+    :param theta_1: angle for joint 3
     :return: coriolis matrix
     """
-    theta_1 = theta[0]
-    theta_2 = theta[1]
-    theta_3 = theta[2]
+
 
     theta_23 = theta_2 + theta_3
     C =  np.zeros(shape=(3,3))
@@ -129,17 +127,14 @@ def make_coriolis_matrix(theta):
     return C
 
 
-def get_jacobian_matricies(theta):
+def get_jacobian_matricies(theta_1,theta_2,theta_3):
     """
 
-    :param theta: list of angles
-    :return: tuple of the jacobian matries of each link
+    :param theta_1: angle for joint 1
+    :param theta_1: angle for joint 2
+    :param theta_1: angle for joint 3
+    :return: cartesian pose of links
     """
-
-
-    theta_1 = theta[0]
-    theta_2 = theta[1]
-    theta_3 = theta[2]
 
 
     J_1 =  np.zeros(shape=(6,3))
@@ -163,15 +158,14 @@ def get_jacobian_matricies(theta):
     return (J_1, J_2, J_3)
 
 
-def fk( theta ):
+def fk( theta_1, theta_2, theta_3 ):
     """
 
-    :param theta: list of angles
+    :param theta_1: angle for joint 1
+    :param theta_1: angle for joint 2
+    :param theta_1: angle for joint 3
     :return: cartesian pose of links
     """
-    theta_1 = theta[0]
-    theta_2 = theta[1]
-    theta_3 = theta[2]
 
 
     pose_1 = (0,0,l[0])
@@ -187,16 +181,16 @@ def fk( theta ):
 
     return ( pose_1, pose_2, pose_3  )
 
-def ik(pos):
+def ik(x,y,z):
     """
 
     :param pos: list of x,y,z position of the EE
     :return: list of the joint angles
     """
 
-    x = pos[0]
-    y = pos[2]
-    z = pos[3]
+    theta_1 = math.atan2(y,z)
+    theta_3 = -math.acos((x*x + y*y) + (z- l[0])  )
+    theta_2 = math.atan2( z- l[0] , math.sqrt(x*x, y*y)   )
 
     pass
 
@@ -205,4 +199,3 @@ def ik(pos):
 
 
 
-print get_jacoboian_matricies([3.14,3.14,3.14])
