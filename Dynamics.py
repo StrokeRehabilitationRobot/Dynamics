@@ -265,12 +265,10 @@ def get_linear_vel(robot):
     """
 
     J1, J2, J3 = get_jacobian_matricies(robot)
-    qd = np.asarray(robot.qd).reshap(3,1)
+    qd = np.asarray(robot.qd).reshape(3,1)
 
     J = J3[0:3,0:3]
     return  J*qd
 
 
 
-r = Robot()
-get_linear_vel(r)
