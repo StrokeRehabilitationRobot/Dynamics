@@ -223,8 +223,9 @@ def get_torque(robot):
     qd = np.asarray(robot.qd).reshap(3,1)
     qdd = np.asarray(robot.qdd).reshap(3,1)
     load = np.asarray(robot.tau).reshap(3,1)
+    J_T = get_J_tranpose(robot)
 
-    return M*qdd + C*qd + G
+    return M*qdd + C*qd + G + J_T*load
 
 
 def trajectory(q, qd, dt):
