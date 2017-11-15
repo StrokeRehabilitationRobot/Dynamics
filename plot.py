@@ -10,18 +10,19 @@ class PlotArm(object):
         """
         create class variable for plot
         """
-        self.fig = plt.figure()
-        self.ax = self.fig.gca(projection = '3d')
-        self.lines = self.ax.plot([],[],[])
-        #self.figure, self.ax = plt.axes(projection='3d')
-        #self.lines, = self.ax.plot3D([],[],[])
-        #self.figure, self.ax = plt.subplots()
-        #self.lines, = self.ax.plot([],[],'=')
-        self.ax.set_autoscaley_on(True)
+        # Set up plot
+
+
+
+
+        self.figure = plt.figure()
+        self.ax = self.figure.add_axes([0, 0, 1, 1], projection='3d')
+        self.lines, = self.ax.plot([], [],[], '-')
+        # # Autoscale on unknown axis and known lims on the other
+
+
+        # Other stuff
         self.ax.grid()
-        pose_1 = [1,2,3]
-        pose_2 = [2,3,9]
-        pose_3 = [7,9,2]
 
 
     def update(self, p_1,p_2,p_3):
@@ -30,11 +31,12 @@ class PlotArm(object):
                 #self.lines.set_zdata(zdata)
         xdata = [ p_1[0], p_2[0], p_3[0] ]
         ydata = [p_1[1], p_2[1], p_3[1]]
-        #zdata = [p_1[1], p_2[1], p_3[1]]
+        zdata = [p_1[1], p_2[1], p_3[1]]
 
         self.lines.set_xdata(xdata)
         self.lines.set_ydata(ydata)
-        #self.lines.set_zdata(zdata)
+        self.lines.set_3d_properties(zdata)
+
 
         self.ax.relim()
         self.ax.autoscale_view()
