@@ -17,9 +17,7 @@ def make_mass_matrix(robot):
 
     """
 
-    :param theta_1: angle for joint 1
-    :param theta_1: angle for joint 2
-    :param theta_1: angle for joint 3
+    :param robot:
     :return: mass matrix
     """
 
@@ -59,9 +57,7 @@ def make_mass_matrix(robot):
 def make_gravity_matrix(robot):
     """
 
-    :param theta_1: angle for joint 1
-    :param theta_1: angle for joint 2
-    :param theta_1: angle for joint 3
+    :param robot:
     :return: gravity matix
     """
     I, m, l, r = robot.unpack()
@@ -87,9 +83,7 @@ def make_gravity_matrix(robot):
 def make_coriolis_matrix(robot):
     """
 
-    :param theta_1: angle for joint 1
-    :param theta_1: angle for joint 2
-    :param theta_1: angle for joint 3
+    :param: robot
     :return: coriolis matrix
     """
 
@@ -142,10 +136,8 @@ def make_coriolis_matrix(robot):
 def get_jacobian_matricies(robot):
     """
 
-    :param theta_1: angle for joint 1
-    :param theta_1: angle for joint 2
-    :param theta_1: angle for joint 3
-    :return: cartesian pose of links
+    :param robot:
+    :return:
     """
 
     I, m, l, r = robot.unpack()
@@ -178,12 +170,9 @@ def get_jacobian_matricies(robot):
 def fk( robot):
     """
 
-    :param theta_1: angle for joint 1
-    :param theta_1: angle for joint 2
-    :param theta_1: angle for joint 3
-    :return: cartesian pose of links
+    :param robot:
+    :return:
     """
-
     I, m, l, r = robot.unpack()
     theta_1 = robot.q[0]
     theta_2 = robot.q[1]
@@ -205,10 +194,9 @@ def fk( robot):
 def ik(robot, pose):
     """
 
-    :param x: x position of the EE
-    :param y: y position of the EE
-    :param z: z position of the EE
-    :return: list of the joint angles
+    :param robot:
+    :param pose:
+    :return:
     """
     I, m, l, r = robot.unpack()
     x = pose[0]
@@ -270,7 +258,22 @@ def get_linear_vel(robot):
     J = J3[0:3,0:3]
     return  J*qd
 
+def get_J_tranpose(robot):
+    """
+
+    :param robot:
+    :return:
+    """
+
+    J1, J2, J3 = get_jacobian_matricies(robot)
+    J = J3[0:3, 0:3]
+
+    return np.transpose(J)
+
+
+
+
 
 
 r = Robot()
-get_linear_vel(r)
+print get_J_tranpose(r)
