@@ -171,7 +171,7 @@ def get_jacobian_matricies(robot):
     return (J_1, J_2, J_3)
 
 
-def fk( robot):
+def fk(robot):
     """
 
     :param robot:
@@ -184,7 +184,7 @@ def fk( robot):
 
     pose_1 = (0,0,l[0])
 
-    pose_2 = ( l[1]*c(theta_2)*c(theta_1), l[1]*c(theta_2)*c(theta_1), l[0] + l[2]*s(theta_2) )
+    pose_2 = ( l[1]*c(theta_2)*c(theta_1), l[1]*c(theta_2)*s(theta_1), l[0] + l[2]*s(theta_2) )
 
     pose_3 = (
                  ( l[1]*c(theta_2) + l[2]*c(theta_2 + theta_3) )*c(theta_1), \
