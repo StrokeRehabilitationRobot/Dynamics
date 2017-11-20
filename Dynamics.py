@@ -26,15 +26,18 @@ def make_mass_matrix(robot):
     theta_2 = robot.q[1]
     theta_3 = robot.q[2]
 
-    M_11 = I[1][1] * s(theta_2) ** 2 + I[2][1] * s(theta_2 + theta_3) ** 2 + \
-           I[0][2] + I[1][2] * c(theta_2) ** 2 + \
-           I[1][2] * c(theta_2 + theta_3) ** 2
+    M_11 = I[1][1] * s(theta_2) ** 2 + I[2][1] * c(theta_2 + theta_3) ** 2 + \
+           m[1]*I[0][2]*c(theta_2)**2*r[1]**2 + \
+           m[2]*(l[0]*c(theta_2) + r[1]*c(theta_2+theta_3))**2
+
     M_12 = 0
 
     M_13 = 0
+
     M_21 = 0
+
     M_22 = I[1][0] + I[2][0] + m[2] * l[0] ** 2 + \
-           m[1] * r[0] ** 2 + m[1] ** 2 + \
+           m[1] * r[0] ** 2 + m[2]*r[1] ** 2 + \
            2 * m[2] * l[0] * r[1] * c(theta_3)
 
     M_23 = I[2][0] + m[2] * r[1] ** 2 + \
@@ -43,7 +46,8 @@ def make_mass_matrix(robot):
 
     M_31 = 0
     M_32 = I[2][0] + m[2] * r[1] ** 2 + \
-           m[2] * l[1] * r[1] * c(theta_3)
+           m[2] * l[0] * r[1] * c(theta_3)
+
     M_33 = I[2][0] + m[2] * r[1] ** 2
 
 
