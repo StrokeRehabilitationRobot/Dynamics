@@ -67,6 +67,7 @@ def make_gravity_matrix(robot):
     I, m, l, r = robot.unpack()
     theta_1 = robot.q[0]
     theta_2 = robot.q[1]
+    theta_3 = robot.q[2]
 
     gravity = 9.81
 
@@ -208,7 +209,7 @@ def ik(robot, pose):
     z = pose[2]
 
     theta_1 = math.atan2(y,z)
-    theta_3 = -math.acos( (x*x + y*y + (z- l[0])**2 -l[1]*l[1] - l[2]*[2])/ ( 2*l[1]*[2] )   ) - 0.5*math.pi
+    theta_3 = -math.acos( (x*x + y*y + (z- l[0])**2 -l[1]*l[1] - l[2]*[2])/ ( 2*l[1]*l[2] )   ) - 0.5*math.pi
     theta_2 = math.atan2( z- l[0] , math.sqrt(x*x, y*y) ) - math.atan2( l[2]*s(theta_3), l[1] + l[2]*c(theta_3) )
 
     return (theta_1, theta_2, theta_3)
