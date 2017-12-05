@@ -55,7 +55,7 @@ def make_mass_matrix(robot):
     M = np.matrix([ [ M_11, M_12, M_13],
                     [ M_21, M_22, M_23],
                     [ M_31, M_32, M_33] ] )
-    return  M
+    return  np.asmatrix(M)
 
 
 def make_gravity_matrix(robot):
@@ -82,7 +82,7 @@ def make_gravity_matrix(robot):
     G = np.matrix([ [ G_1 ], [ G_2 ], [ G_3 ] ])
 
 
-    return G
+    return np.asmatrix(G)
 
 
 def make_coriolis_matrix(robot):
@@ -100,17 +100,17 @@ def make_coriolis_matrix(robot):
     theta_23 = theta_2 + theta_3
     C =  np.zeros(shape=(3,3))
 
-    gamma_001 = 0.5*( I[1][2] - I[2][2] - m[1]*r[1]^2)*s(2*theta_2) + 0.5*(  I[2][1] - I[2][2] )*s(2*theta_23) \
+    gamma_001 = 0.5*( I[1][2] - I[2][2] - m[1]*r[1]**2)*s(2*theta_2) + 0.5*(  I[2][1] - I[2][2] )*s(2*theta_23) \
                  -m[2]*(l[1]*c(theta_2) + r[2]*c(theta_23))*(l[1]*s(theta_2) + r[2] *s(theta_23))
 
     gamma_002 = 0.5*(I[2][1] - I[2][2])*c(2*theta_23) -m[2]*r[2]*s(theta_23)*(l[1] *c(theta_2) + r[2]*c(theta_23))
 
-    gamma_010 = 0.5*(I[1][1] - I[1][2] - m[1]*r[1]^2 )*c(2*theta_2) + 0.5*( I[2][1] - I[2][2])*c(2*theta_2) \
+    gamma_010 = 0.5*(I[1][1] - I[1][2] - m[1]*r[1]**2 )*c(2*theta_2) + 0.5*( I[2][1] - I[2][2])*c(2*theta_2) \
                 - m[2]*(  l[1]*c(theta_2) + r[2]*c(theta_23) )*( l[1]*s(theta_2) + r[2]*s(theta_23)  )
 
-    gamma_020 = 0.5*( I[2][1] - I[2][2] )*sin(2*theta_23) - m[2]*r[2]*s(theta_23)*( l[1]*c(theta_2) + r[2]*c(theta_23))
+    gamma_020 = 0.5*( I[2][1] - I[2][2] )*s(2*theta_23) - m[2]*r[2]*s(theta_23)*( l[1]*c(theta_2) + r[2]*c(theta_23))
 
-    gamma_100 = 0.5*(I[1][2] - I[1][1] + m[1]*r[1]^2)*s(2*theta_2) + 0.5*(I[2][2] - I[2][1])*s(2*theta_23) + \
+    gamma_100 = 0.5*(I[1][2] - I[1][1] + m[1]*r[1]**2)*s(2*theta_2) + 0.5*(I[2][2] - I[2][1])*s(2*theta_23) + \
                 m[2]*( l[1]*c(theta_2) + r[2]*c(theta_23) )*(l[1]*s(theta_2) +  r[2]*s(theta_23) )
 
 
@@ -135,7 +135,7 @@ def make_coriolis_matrix(robot):
     C[2,1] = gamma_211
 
 
-    return C
+    return np.asmatrix(C)
 
 
 def get_jacobian_matricies(robot):
@@ -224,13 +224,13 @@ def get_torque(robot):
     M = make_mass_matrix( robot )
     C = make_coriolis_matrix(robot)
     G = make_gravity_matrix(robot)
-    q = np.asarray(robot.q).reshap(3,1)
-    qd = np.asarray(robot.qd).reshap(3,1)
-    qdd = np.asarray(robot.qdd).reshap(3,1)
-    load = np.asarray(robot.tau).reshap(3,1)
+    q = np.asarray(robot.q).reshape(3,1)
+    qd = np.asarray(robot.qd).reshape(3,1)
+    qdd = np.asarray(robot.qdd).reshape(3,1)
+    load = np.asarray(robot.tau).reshape(3,1)
     J_T = get_J_tranpose(robot)
 
-    return M*qdd + C*qd + G + J_T*load
+    return M*qdd #+ C*qd + G #+ J_T*load
 
 
 def trajectory(q, qd, dt):
