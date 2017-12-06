@@ -190,7 +190,7 @@ def fk(robot):
     pose_3 = (
                  ( l[1]*c(theta_2) + l[2]*c(theta_2 + theta_3) )*c(theta_1), \
                  ( l[1]*c(theta_2) + l[2]*c(theta_2 + theta_3))*s(theta_1), \
-                 ( l[0] + l[1]*s(theta_1) + l[2]*s(theta_2+theta_3))
+                 ( l[0] + l[1]*s(theta_2) + l[2]*s(theta_2+theta_3))
              )
 
 
@@ -209,7 +209,7 @@ def ik(robot, pose):
     z = pose[2]
 
     theta_1 = math.atan2(y,z)
-    theta_3 = -math.acos( (x*x + y*y + (z- l[0])**2 -l[1]*l[1] - l[2]*[2])/ ( 2*l[1]*l[2] )   ) - 0.5*math.pi
+    theta_3 = -math.acos( (x*x + y*y + (z- l[0])**2 -l[1]*l[1] - l[2]*l[2])/ ( 2*l[1]*l[2] )   ) - 0.5*math.pi
     theta_2 = math.atan2( z- l[0] , math.sqrt(x*x, y*y) ) - math.atan2( l[2]*s(theta_3), l[1] + l[2]*c(theta_3) )
 
     return (theta_1, theta_2, theta_3)
@@ -252,11 +252,6 @@ def trajectory(q, qd, dt):
 
 
 def get_linear_vel(robot):
-    """
-
-    :param robot:
-    :return:
-    """
 
     J1, J2, J3 = get_jacobian_matricies(robot)
     qd = np.asarray(robot.qd).reshape(3,1)
@@ -281,5 +276,3 @@ def get_J_tranpose(robot):
 
 
 
-r = Robot()
-print get_J_tranpose(r)
