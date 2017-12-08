@@ -162,9 +162,9 @@ def get_jacobian_matricies(robot):
                         [  -s(theta_2),                    0,                0],
                         [c(theta_2),                       0,                0] ] )
 
-    J_3 = np.matrix( [ [l[1] * c(theta_2) - r[1] * c(theta_2 + theta_3), 0, 0],
-                       [0, l[0] * s(theta_1), 0],
-                       [0, -l[1] - l[0] * c(theta_3), -r[1]],
+    J_3 = np.matrix( [ [-l[1] * c(theta_2) - r[1] * c(theta_2 + theta_3), 0, 0],
+                       [ 0, l[0] * s(theta_1), 0],
+                       [ 0,                   -r[1] - l[0] * c(theta_3),                                     -r[1]],
                        [ 0,                                          -1,                    -1 ],
                        [-s(theta_2+theta_3),                          0,                     0 ],
                        [c(theta_2+theta_3),                           0,                     0 ] ])
