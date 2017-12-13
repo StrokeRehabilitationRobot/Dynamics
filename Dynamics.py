@@ -74,10 +74,10 @@ def make_gravity_matrix(robot):
     G_1 = 0
 
 
-    G_2 = -(m[1] * r[0] + m[2] * l[0]) * gravity * c(theta_2) \
-          - m[2] * r[1] * c(theta_2 + theta_3)
+    G_2 = (m[1] * r[1] + m[2] * l[1]) * gravity * c(theta_2) \
+           + m[2] * r[2] * c(theta_2 + theta_3)
 
-    G_3 = -m[2] * gravity * r[1] * c(theta_2 + theta_3)
+    G_3 = m[2] * gravity * r[2] * c(theta_2 + theta_3)
 
     G = np.matrix([ [ G_1 ], [ G_2 ], [ G_3 ] ])
 
