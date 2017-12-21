@@ -21,7 +21,7 @@ def make_mass_matrix(robot):
     :return: mass matrix
     """
 
-    I,m,l,r = robot.unpack()
+    I,m,l,r = robot.unpack
     theta_1 = robot.q[0]
     theta_2 = robot.q[1]
     theta_3 = robot.q[2]
@@ -64,7 +64,7 @@ def make_gravity_matrix(robot):
     :param robot:
     :return: gravity matix
     """
-    I, m, l, r = robot.unpack()
+    I, m, l, r = robot.unpack
     theta_1 = robot.q[0]
     theta_2 = robot.q[1]
     theta_3 = robot.q[2]
@@ -92,7 +92,7 @@ def make_coriolis_matrix(robot):
     :return: coriolis matrix
     """
 
-    I, m, l, r = robot.unpack()
+    I, m, l, r = robot.unpack
     theta_1 = robot.q[0]
     theta_2 = robot.q[1]
     theta_3 = robot.q[2]
@@ -145,7 +145,7 @@ def get_jacobian_matricies(robot):
     :return:
     """
 
-    I, m, l, r = robot.unpack()
+    I, m, l, r = robot.unpack
     theta_1 = robot.q[0]
     theta_2 = robot.q[1]
     theta_3 = robot.q[2]
@@ -178,7 +178,7 @@ def fk(robot):
     :param robot:
     :return:
     """
-    I, m, l, r = robot.unpack()
+    I, m, l, r = robot.unpack
     theta_1 = robot.q[0]
     theta_2 = robot.q[1]
     theta_3 = robot.q[2]
@@ -203,7 +203,7 @@ def ik(robot, pose):
     :param pose:
     :return:
     """
-    I, m, l, r = robot.unpack()
+    I, m, l, r = robot.unpack
     x = pose[0]
     y = pose[1]
     z = pose[2]
