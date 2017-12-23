@@ -34,7 +34,7 @@ class InverseController(object):
         G = Dynamics.make_gravity_matrix(robot)
         load = np.asarray(robot.tau).reshap(3, 1)
 
-        u = M*aq + C*qd_measured + G + load
+        u = M*aq + C*qd_measured + G - load
 
 
 
